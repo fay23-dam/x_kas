@@ -94,7 +94,46 @@
     Donasi berhasil dikurangi!
   </div>
 </div>
+<div class="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-6 mt-6">
+  <div class="text-center">
+      <h2 class="text-2xl font-semibold text-gray-800">Buat Rekap</h2>
+      <p class="text-gray-600 mt-2">Pilih rentang waktu untuk membuat rekap donasi</p>
+  </div>
 
+  <form id="rekap-form" class="mt-6 space-y-4">
+      <!-- Tanggal Mulai -->
+      <div>
+          <label for="tanggal-mulai" class="block text-gray-600 font-medium">Tanggal Mulai</label>
+          <input type="date" id="tanggal-mulai" 
+                 class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+      </div>
+
+      <!-- Tanggal Akhir -->
+      <div>
+          <label for="tanggal-akhir" class="block text-gray-600 font-medium">Tanggal Akhir</label>
+          <input type="date" id="tanggal-akhir" 
+                 class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+      </div>
+
+      <!-- Keterangan -->
+      <div>
+          <label for="keterangan-rekap" class="block text-gray-600 font-medium">Keterangan (Opsional)</label>
+          <input type="text" id="keterangan-rekap" placeholder="Contoh: Rekap Minggu Pertama Maret" 
+                 class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <!-- Submit Button -->
+      <button type="button" onclick="buatRekap()" 
+              class="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600">
+          Buat Rekap
+      </button>
+  </form>
+
+  <!-- Notification -->
+  <div id="notif-rekap" class="hidden mt-4 text-center p-3 rounded-lg bg-green-100 text-green-700">
+      Rekap berhasil dibuat!
+  </div>
+</div>
   <script>
     // Konfigurasi Firebase
     const firebaseConfig = {
@@ -168,7 +207,7 @@
         }
     }
 
-    // Fungsi tambah donasi yang sudah diperbaiki
+    // Fungsi tambah donasi yang sudah dimodifikasi
     async function tambahDonasi() {
         const nama = document.getElementById('nama').value;
         const donasi = parseInt(document.getElementById('donasi').value.trim());
@@ -190,22 +229,25 @@
             
             // Update donasi
             await donasiRef.update({
-                nama: nama, // Simpan nama asli
+                nama: nama,
                 donasi: currentDonasi + donasi,
                 tanggalDonasi: tanggal
             });
 
-            // Add to riwayat dengan timestamp negatif untuk urutan terbalik
-            const timestamp = -Date.now();
+            // Konversi tanggal untuk timestamp dan waktu
+            const dateObj = new Date(tanggal);
+            const timestamp = -dateObj.getTime(); // Negatif untuk urutan terbalik
+            
+            // Add to riwayat
             const riwayatRef = database.ref('riwayat');
             const newRiwayatRef = riwayatRef.push();
             await newRiwayatRef.set({
                 nama,
                 donasi,
                 tanggal,
-                waktu: new Date().toLocaleString('id-ID'),
+                waktu: dateObj.toLocaleDateString('id-ID'), // Format tanggal Indonesia
                 tipe: 'tambah',
-                timestamp: timestamp // Tambahkan timestamp
+                timestamp: timestamp
             });
 
             const notif = document.getElementById('notif');
@@ -220,7 +262,7 @@
         }
     }
 
-    // Fungsi kurangi donasi yang sudah diperbaiki
+    // Fungsi kurangi donasi yang sudah dimodifikasi
     async function kurangiDonasi() {
         const nama = document.getElementById('nama-kurangi').value;
         const donasi = parseInt(document.getElementById('donasi-kurangi').value.trim());
@@ -247,22 +289,25 @@
 
             // Update donasi
             await donasiRef.update({
-                nama: nama, // Simpan nama asli
+                nama: nama,
                 donasi: currentDonasi - donasi,
                 tanggalDonasi: tanggal
             });
 
-            // Add to riwayat dengan timestamp negatif untuk urutan terbalik
-            const timestamp = -Date.now();
+            // Konversi tanggal untuk timestamp dan waktu
+            const dateObj = new Date(tanggal);
+            const timestamp = -dateObj.getTime(); // Negatif untuk urutan terbalik
+            
+            // Add to riwayat
             const riwayatRef = database.ref('riwayat');
             const newRiwayatRef = riwayatRef.push();
             await newRiwayatRef.set({
                 nama,
                 donasi: -donasi,
                 tanggal,
-                waktu: new Date().toLocaleString('id-ID'),
+                waktu: dateObj.toLocaleDateString('id-ID'), // Format tanggal Indonesia
                 tipe: 'kurang',
-                timestamp: timestamp // Tambahkan timestamp
+                timestamp: timestamp
             });
 
             const notif = document.getElementById('notif-kurangi');
@@ -282,6 +327,122 @@
         loadNama();
         loadNamaKurangi();
     });
+
+    async function buatRekap() {
+        const tanggalMulai = document.getElementById('tanggal-mulai').value;
+        const tanggalAkhir = document.getElementById('tanggal-akhir').value;
+        const keterangan = document.getElementById('keterangan-rekap').value;
+
+        if (!tanggalMulai || !tanggalAkhir) {
+            alert('Harap pilih rentang tanggal!');
+            return;
+        }
+
+        if (new Date(tanggalAkhir) < new Date(tanggalMulai)) {
+            alert('Tanggal akhir tidak boleh lebih awal dari tanggal mulai!');
+            return;
+        }
+
+        try {
+            // Ambil data riwayat dalam rentang waktu
+            const riwayatRef = database.ref('riwayat');
+            const snapshot = await riwayatRef
+                .orderByChild('tanggal')
+                .startAt(tanggalMulai)
+                .endAt(tanggalAkhir)
+                .once('value');
+
+            const riwayatData = snapshot.val();
+
+            if (!riwayatData) {
+                alert('Tidak ada transaksi dalam rentang waktu yang dipilih!');
+                return;
+            }
+
+            // Hitung total dan kelompokkan berdasarkan anggota
+            let totalMasuk = 0;
+            let totalKeluar = 0;
+            const detailMasuk = [];
+            const detailKeluar = [];
+            const anggotaDonasi = {};
+
+            Object.values(riwayatData).forEach(transaksi => {
+                // Update total masuk/keluar
+                if (transaksi.tipe === 'tambah') {
+                    totalMasuk += transaksi.donasi;
+                    detailMasuk.push(transaksi);
+                    
+                    // Update donasi per anggota
+                    if (!anggotaDonasi[transaksi.nama]) {
+                        anggotaDonasi[transaksi.nama] = 0;
+                    }
+                    anggotaDonasi[transaksi.nama] += transaksi.donasi;
+                } else {
+                    totalKeluar += Math.abs(transaksi.donasi);
+                    detailKeluar.push(transaksi);
+                    
+                    // Update pengurangan per anggota
+                    if (!anggotaDonasi[transaksi.nama]) {
+                        anggotaDonasi[transaksi.nama] = 0;
+                    }
+                    anggotaDonasi[transaksi.nama] -= Math.abs(transaksi.donasi);
+                }
+            });
+
+            // Urutkan detail transaksi berdasarkan tanggal
+            detailMasuk.sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
+            detailKeluar.sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
+
+            // Buat rekap
+            const rekapRef = database.ref('rekap');
+            const newRekapRef = rekapRef.push();
+            
+            await newRekapRef.set({
+                tanggal_mulai: tanggalMulai,
+                tanggal_akhir: tanggalAkhir,
+                keterangan: keterangan || `Rekap ${formatTanggal(tanggalMulai)} s/d ${formatTanggal(tanggalAkhir)}`,
+                total_kas: totalMasuk - totalKeluar,
+                total_masuk: totalMasuk,
+                total_keluar: totalKeluar,
+                detail_transaksi: {
+                    masuk: detailMasuk,
+                    keluar: detailKeluar
+                },
+                detail_anggota: anggotaDonasi,
+                timestamp: -Date.now(),
+                created_at: new Date().toLocaleString('id-ID', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                })
+            });
+
+            // Tampilkan notifikasi
+            const notif = document.getElementById('notif-rekap');
+            notif.classList.remove('hidden');
+            notif.textContent = 'Rekap berhasil dibuat!';
+
+            // Reset form
+            document.getElementById('rekap-form').reset();
+
+        } catch (error) {
+            console.error('Gagal membuat rekap:', error);
+            alert('Terjadi kesalahan saat membuat rekap. Silakan coba lagi.');
+        }
+    }
+
+    // Fungsi helper untuk format tanggal
+    function formatTanggal(tanggal) {
+        const options = { 
+            day: '2-digit', 
+            month: '2-digit', 
+            year: 'numeric' 
+        };
+        return new Date(tanggal).toLocaleDateString('id-ID', options);
+    }
   </script>
 </body>
 </html>
