@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tambah Donasi</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
 </head>
 <body class="bg-gray-100 p-6">
   <!-- Container -->
@@ -93,129 +96,192 @@
 </div>
 
   <script>
-    // Muat data JSON dan isi dropdown
-    async function loadNama() {
-      try {
-        const response = await fetch('/donasi.json');
-        if (!response.ok) {
-          throw new Error('Gagal memuat data JSON');
-        }
-        const data = await response.json();
+    // Konfigurasi Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyA1hyyWwooc2MxhxDRkFPHYKqJ2eQxmgck",
+        authDomain: "sazaraaa-c452b.firebaseapp.com",
+        databaseURL: "https://sazaraaa-c452b-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "sazaraaa-c452b",
+        storageBucket: "sazaraaa-c452b.firebasestorage.app",
+        messagingSenderId: "596360200177",
+        appId: "1:596360200177:web:2123d84bf17df277d50e50",
+        measurementId: "G-STEGE63JZK"
+    };
 
-        const namaSelect = document.getElementById('nama');
-        namaSelect.innerHTML = '<option value="" disabled selected>Pilih nama</option>'; // Reset dropdown
-        data.forEach(item => {
-          const option = document.createElement('option');
-          option.value = item.nama;
-          option.textContent = item.nama;
-          namaSelect.appendChild(option);
-        });
-      } catch (error) {
-        console.error('Gagal memuat data JSON:', error);
-        alert('Gagal memuat nama anggota. Silakan coba lagi nanti.');
-      }
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // Fungsi untuk mengkonversi nama menjadi key yang valid
+    function convertToValidKey(nama) {
+        return nama.replace(/[\s.#$\[\]]/g, '_');
     }
 
-    // Tambahkan donasi
+    // Fungsi load nama
+    function loadNama() {
+        try {
+            const namaRef = database.ref('donasi');
+            namaRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                console.log('Data loaded:', data);
+                
+                const namaSelect = document.getElementById('nama');
+                namaSelect.innerHTML = '<option value="" disabled selected>Pilih nama</option>';
+                
+                if (data) {
+                    Object.values(data).forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item.nama;
+                        option.textContent = item.nama;
+                        namaSelect.appendChild(option);
+                    });
+                }
+            });
+        } catch (error) {
+            console.error('Error loading data:', error);
+            alert('Gagal memuat nama anggota. Silakan coba lagi nanti.');
+        }
+    }
+
+    // Fungsi load nama untuk form pengurangan
+    function loadNamaKurangi() {
+        try {
+            const namaRef = database.ref('donasi');
+            namaRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                
+                const namaSelect = document.getElementById('nama-kurangi');
+                namaSelect.innerHTML = '<option value="" disabled selected>Pilih nama</option>';
+                
+                if (data) {
+                    Object.values(data).forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item.nama;
+                        option.textContent = item.nama;
+                        namaSelect.appendChild(option);
+                    });
+                }
+            });
+        } catch (error) {
+            console.error('Error loading data:', error);
+            alert('Gagal memuat nama anggota. Silakan coba lagi nanti.');
+        }
+    }
+
+    // Fungsi tambah donasi yang sudah diperbaiki
     async function tambahDonasi() {
-      const nama = document.getElementById('nama').value;
-      const donasi = parseInt(document.getElementById('donasi').value.trim());
-      const tanggal = document.getElementById('tanggal').value;
+        const nama = document.getElementById('nama').value;
+        const donasi = parseInt(document.getElementById('donasi').value.trim());
+        const tanggal = document.getElementById('tanggal').value;
 
-      if (!nama || isNaN(donasi) || donasi <= 0 || !tanggal) {
-        alert('Harap masukkan data dengan benar!');
-        return;
-      }
-
-      try {
-        // Kirim data ke backend
-        const response = await fetch('/api/donasi', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ nama, donasi, tanggal })
-        });
-
-        const result = await response.json();
-        if (response.ok) {
-          const notif = document.getElementById('notif');
-          notif.classList.remove('hidden');
-          notif.textContent = `Donasi berhasil ditambahkan untuk ${nama}!`;
-
-          // Reset form
-          document.getElementById('donasi-form').reset();
-        } else {
-          alert(result.message || 'Terjadi kesalahan');
+        if (!nama || isNaN(donasi) || donasi <= 0 || !tanggal) {
+            alert('Harap masukkan data dengan benar!');
+            return;
         }
-      } catch (error) {
-        console.error('Gagal memperbarui data:', error);
-        alert('Terjadi kesalahan saat menambahkan donasi. Silakan coba lagi.');
-      }
+
+        try {
+            // Konversi nama menjadi key yang valid
+            const namaKey = convertToValidKey(nama);
+            const donasiRef = database.ref('donasi/' + namaKey);
+            
+            // Get current donasi amount
+            const snapshot = await donasiRef.once('value');
+            const currentDonasi = snapshot.val()?.donasi || 0;
+            
+            // Update donasi
+            await donasiRef.update({
+                nama: nama, // Simpan nama asli
+                donasi: currentDonasi + donasi,
+                tanggalDonasi: tanggal
+            });
+
+            // Add to riwayat dengan timestamp negatif untuk urutan terbalik
+            const timestamp = -Date.now();
+            const riwayatRef = database.ref('riwayat');
+            const newRiwayatRef = riwayatRef.push();
+            await newRiwayatRef.set({
+                nama,
+                donasi,
+                tanggal,
+                waktu: new Date().toLocaleString('id-ID'),
+                tipe: 'tambah',
+                timestamp: timestamp // Tambahkan timestamp
+            });
+
+            const notif = document.getElementById('notif');
+            notif.classList.remove('hidden');
+            notif.textContent = `Donasi berhasil ditambahkan untuk ${nama}!`;
+
+            // Reset form
+            document.getElementById('donasi-form').reset();
+        } catch (error) {
+            console.error('Gagal memperbarui data:', error);
+            alert('Terjadi kesalahan saat menambahkan donasi. Silakan coba lagi.');
+        }
     }
 
-    // Panggil fungsi untuk memuat nama saat halaman dimuat
-    document.addEventListener('DOMContentLoaded', loadNama);
-    // Muat data JSON dan isi dropdown untuk pengurangan
-async function loadNamaKurangi() {
-  try {
-    const response = await fetch('/donasi.json');
-    if (!response.ok) {
-      throw new Error('Gagal memuat data JSON');
-    }
-    const data = await response.json();
+    // Fungsi kurangi donasi yang sudah diperbaiki
+    async function kurangiDonasi() {
+        const nama = document.getElementById('nama-kurangi').value;
+        const donasi = parseInt(document.getElementById('donasi-kurangi').value.trim());
+        const tanggal = document.getElementById('tanggal-kurangi').value;
 
-    const namaSelect = document.getElementById('nama-kurangi');
-    namaSelect.innerHTML = '<option value="" disabled selected>Pilih nama</option>'; // Reset dropdown
-    data.forEach(item => {
-      const option = document.createElement('option');
-      option.value = item.nama;
-      option.textContent = item.nama;
-      namaSelect.appendChild(option);
+        if (!nama || isNaN(donasi) || donasi <= 0 || !tanggal) {
+            alert('Harap masukkan data dengan benar!');
+            return;
+        }
+
+        try {
+            // Konversi nama menjadi key yang valid
+            const namaKey = convertToValidKey(nama);
+            const donasiRef = database.ref('donasi/' + namaKey);
+            
+            // Get current donasi amount
+            const snapshot = await donasiRef.once('value');
+            const currentDonasi = snapshot.val()?.donasi || 0;
+            
+            if (currentDonasi < donasi) {
+                alert('Jumlah donasi yang dikurangi melebihi saldo!');
+                return;
+            }
+
+            // Update donasi
+            await donasiRef.update({
+                nama: nama, // Simpan nama asli
+                donasi: currentDonasi - donasi,
+                tanggalDonasi: tanggal
+            });
+
+            // Add to riwayat dengan timestamp negatif untuk urutan terbalik
+            const timestamp = -Date.now();
+            const riwayatRef = database.ref('riwayat');
+            const newRiwayatRef = riwayatRef.push();
+            await newRiwayatRef.set({
+                nama,
+                donasi: -donasi,
+                tanggal,
+                waktu: new Date().toLocaleString('id-ID'),
+                tipe: 'kurang',
+                timestamp: timestamp // Tambahkan timestamp
+            });
+
+            const notif = document.getElementById('notif-kurangi');
+            notif.classList.remove('hidden');
+            notif.textContent = `Donasi berhasil dikurangi untuk ${nama}!`;
+
+            // Reset form
+            document.getElementById('kurangi-donasi-form').reset();
+        } catch (error) {
+            console.error('Gagal memperbarui data:', error);
+            alert('Terjadi kesalahan saat mengurangi donasi. Silakan coba lagi.');
+        }
+    }
+
+    // Load data when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        loadNama();
+        loadNamaKurangi();
     });
-  } catch (error) {
-    console.error('Gagal memuat data JSON:', error);
-    alert('Gagal memuat nama anggota. Silakan coba lagi nanti.');
-  }
-}
-
-// Kurangi donasi
-async function kurangiDonasi() {
-  const nama = document.getElementById('nama-kurangi').value;
-  const donasi = parseInt(document.getElementById('donasi-kurangi').value.trim());
-  const tanggal = document.getElementById('tanggal-kurangi').value;
-
-  if (!nama || isNaN(donasi) || donasi <= 0 || !tanggal) {
-    alert('Harap masukkan data dengan benar!');
-    return;
-  }
-
-  try {
-    // Kirim data ke backend untuk mengurangi donasi
-    const response = await fetch('/kurangi-donasi', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nama, donasi, tanggal })
-    });
-
-    const result = await response.json();
-    if (response.ok) {
-      const notif = document.getElementById('notif-kurangi');
-      notif.classList.remove('hidden');
-      notif.textContent = `Donasi berhasil dikurangi untuk ${nama}!`;
-
-      // Reset form
-      document.getElementById('kurangi-donasi-form').reset();
-    } else {
-      alert(result.message || 'Terjadi kesalahan');
-    }
-  } catch (error) {
-    console.error('Gagal memperbarui data:', error);
-    alert('Terjadi kesalahan saat mengurangi donasi. Silakan coba lagi.');
-  }
-}
-
-// Panggil fungsi untuk memuat nama anggota saat halaman dimuat
-document.addEventListener('DOMContentLoaded', loadNamaKurangi);
-
   </script>
 </body>
 </html>

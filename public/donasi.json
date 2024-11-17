@@ -1,102 +1,104 @@
-[
-  {
-    "nama": "Maya Nurlati Kelian",
-    "donasi": 2000,
-    "tanggalDonasi": "2024-11-17"
-  },
-  {
-    "nama": "Adjid Ardiansyah Hamdar",
-    "donasi": 1000,
-    "tanggalDonasi": "2024-11-17"
-  },
-  {
-    "nama": "Bita Mallisa'",
-    "donasi": 3000,
-    "tanggalDonasi": "2024-11-17"
-  },
-  {
-    "nama": "Muh Rifki Al-Ghifari",
-    "donasi": 0,
-    "tanggalDonasi": "2024-11-17"
-  },
-  {
-    "nama": "Nurhaliza'",
-    "donasi": 0,
-    "tanggalDonasi": "2024-11-17"
-  },
-  {
-    "nama": "La Muhammad Faishal Nurullah'",
-    "donasi": 0,
-    "tanggalDonasi": "2024-11-17"
-  },
-  {
-    "nama": "Ilham S",
-    "donasi": 0,
-    "tanggalDonasi": "2024-11-17"
-  },
-  {
-    "nama": "Djoko Bayu Ardiasyah",
-    "donasi": 0,
-    "tanggalDonasi": "2024-11-17"
-  },
-  {
-    "nama": "Putri Wulandari",
-    "donasi": 0,
-    "tanggalDonasi": "2024-11-17"
-  },
-  {
-    "nama": "Sri Wulandari",
-    "donasi": 0,
-    "tanggalDonasi": "2024-11-17"
-  },
-  {
-    "nama": "Moh Saddam Satria",
-    "donasi": 0,
-    "tanggalDonasi": "2024-11-17"
-  },
-  {
-    "nama": "Anang Alfikran",
-    "donasi": 0,
-    "tanggalDonasi": "2024-11-17"
-  },
-  {
-    "nama": "Devi Maharani",
-    "donasi": 0,
-    "tanggalDonasi": "2024-11-17"
-  },
-  {
-    "nama": "Nabila Ashari Amsari",
-    "donasi": 0,
-    "tanggalDonasi": "2024-11-17"
-  },
-  {
-    "nama": "Ristanti Salam",
-    "donasi": 0,
-    "tanggalDonasi": "2024-11-17"
-  },
-  {
-    "nama": "Veysi Trivena Punuh",
-    "donasi": 0,
-    "tanggalDonasi": "2024-11-17"
-  },
-  {
-    "nama": "Adinda Trirahayu S.K",
-    "donasi": 0,
-    "tanggalDonasi": "2024-11-17"
-  },
-  {
-    "nama": "Onalisa Mayor",
-    "donasi": 0,
-    "tanggalDonasi": "2024-11-17"
-  },
-  {
-    "nama": "Anggun Maimunah",
-    "donasi": 0,
-    "tanggalDonasi": "2024-11-17"
-  },
-  {
-    "nama": "Alfiyya Faridah",
-    "donasi": 0,
-    "tanggalDonasi": "2024-11-17"
+{
+  "donasi": {
+    "Adjid Ardiansyah Hamdar": {
+      "donasi": 1000,
+      "nama": "Adjid Ardiansyah Hamdar",
+      "tanggalDonasi": "2024-11-17"
+    },
+    "Bita Mallisa": {
+      "donasi": 3000,
+      "nama": "Bita Mallisa",
+      "tanggalDonasi": "2024-11-17"
+    },
+    "Muh Rifki Al-Ghifari": {
+      "donasi": 0,
+      "nama": "Muh Rifki Al-Ghifari",
+      "tanggalDonasi": "2024-11-17"
+    },
+    "Nurhaliza": {
+      "donasi": 0,
+      "nama": "Nurhaliza",
+      "tanggalDonasi": "2024-11-17"
+    },
+    "La Muhammad Faishal Nurullah": {
+      "donasi": 0,
+      "nama": "La Muhammad Faishal Nurullah",
+      "tanggalDonasi": "2024-11-17"
+    },
+    "Ilham S": {
+      "donasi": 0,
+      "nama": "Ilham S",
+      "tanggalDonasi": "2024-11-17"
+    },
+    "Djoko Bayu Ardiasyah": {
+      "donasi": 0,
+      "nama": "Djoko Bayu Ardiasyah",
+      "tanggalDonasi": "2024-11-17"
+    },
+    "Putri Wulandari": {
+      "donasi": 0,
+      "nama": "Putri Wulandari",
+      "tanggalDonasi": "2024-11-17"
+    },
+    "Sri Wulandari": {
+      "donasi": 0,
+      "nama": "Sri Wulandari",
+      "tanggalDonasi": "2024-11-17"
+    },
+    "Moh Saddam Satria": {
+      "donasi": 0,
+      "nama": "Moh Saddam Satria",
+      "tanggalDonasi": "2024-11-17"
+    },
+    "Anang Alfikran": {
+      "donasi": 0,
+      "nama": "Anang Alfikran",
+      "tanggalDonasi": "2024-11-17"
+    },
+    "Devi Maharani": {
+      "donasi": 0,
+      "nama": "Devi Maharani",
+      "tanggalDonasi": "2024-11-17"
+    },
+    "Nabila Ashari Amsari": {
+      "donasi": 0,
+      "nama": "Nabila Ashari Amsari",
+      "tanggalDonasi": "2024-11-17"
+    },
+    "Ristanti Salam": {
+      "donasi": 0,
+      "nama": "Ristanti Salam",
+      "tanggalDonasi": "2024-11-17"
+    },
+    "Veysi Trivena Punuh": {
+      "donasi": 0,
+      "nama": "Veysi Trivena Punuh",
+      "tanggalDonasi": "2024-11-17"
+    },
+    "Adinda Trirahayu S.K": {
+      "donasi": 0,
+      "nama": "Adinda Trirahayu S.K",
+      "tanggalDonasi": "2024-11-17"
+    },
+    "Onalisa Mayor": {
+      "donasi": 0,
+      "nama": "Onalisa Mayor",
+      "tanggalDonasi": "2024-11-17"
+    },
+    "Anggun Maimunah": {
+      "donasi": 0,
+      "nama": "Anggun Maimunah",
+      "tanggalDonasi": "2024-11-17"
+    },
+    "Alfiyya Faridah": {
+      "donasi": 0,
+      "nama": "Alfiyya Faridah",
+      "tanggalDonasi": "2024-11-17"
+    },
+    "Maya Nurlati Kelian": {
+      "donasi": 3000,
+      "nama": "Maya Nurlati Kelian",
+      "tanggalDonasi": "2024-11-18"
+    }
   }
-]
+}
