@@ -31,7 +31,7 @@ function parseCustomDate(waktu) {
   }
   
 // API untuk memperbarui donasi
-app.post('/donasi', async (req, res) => {
+app.post('/api/donasi', async (req, res) => {
     const { nama, donasi, tanggal } = req.body;
 
     if (!nama || !donasi || donasi <= 0 || !tanggal) {
