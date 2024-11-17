@@ -129,7 +129,7 @@
 
       try {
         // Kirim data ke backend
-        const response = await fetch('/donasi', {
+        const response = await fetch('/api/donasi', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ nama, donasi, tanggal })
