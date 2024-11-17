@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar Donasi Kas</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-6">
+  <!-- Container -->
+  <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6">
+    <!-- Header -->
+    <div class="text-center">
+      <h1 class="text-2xl font-semibold text-gray-800">Total Uang Kas</h1>
+      <p id="total-kas" class="text-4xl font-bold text-green-600 mt-2">Rp. 0</p>
+    </div>
+
+    <!-- Divider -->
+    <div class="border-t my-6"></div>
+
+    <!-- Menu Tab -->
+    <div class="flex justify-center space-x-4">
+      <button id="donasiTab" class="bg-blue-500 text-white px-4 py-2 rounded-lg">Donasi Saat Ini</button>
+      <button id="historyTab" class="bg-gray-500 text-white px-4 py-2 rounded-lg">History Donasi</button>
+    </div>
+
+    <!-- Divider -->
+    <div class="border-t my-6"></div>
+
+    <!-- Dropdown to select donor -->
+    <div class="mt-6">
+      <label for="donor-select" class="block text-gray-600 font-medium">Pilih Nama Anggota</label>
+      <select id="donor-select" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="" disabled selected>Pilih Nama Anggota</option>
+      </select>
+    </div>
+
+    <!-- List of Donators -->
+    <div id="donasi-section">
+      <h2 class="text-xl font-semibold text-gray-700 mt-6">Anggota yang Berdonasi</h2>
+      <ul id="donasi-list" class="mt-4 space-y-3"></ul>
+    </div>
+
+    <!-- History of Donators -->
+    <div id="history-section" class="hidden mt-6">
+      <h2 class="text-xl font-semibold text-gray-700">History Donasi</h2>
+      <ul id="history-list" class="mt-4 space-y-3"></ul>
+    </div>
+
+  </div>
+
+  <script>
+    // Fungsi untuk mengubah format waktu yang ada menjadi objek Date
+    function parseCustomDate(dateString) {
+      const regex = /(\d{1,2} \w+ \d{4}) pukul (\d{2}):(\d{2}):(\d{2})/;
+      const match = dateString.match(regex);
+
+      if (match) {
+        const datePart = match[1]; // Misalnya: "17 November 2024"
+        const hour = match[2]; // Jam
+        const minute = match[3]; // Menit
+        const second = match[4]; // Detik
+
+        // Mengonversi tanggal dan waktu menjadi objek Date
+        return new Date(`${datePart} ${hour}:${minute}:${second}`);
+      }
+      return null; // Jika format tidak sesuai
+    }
+
+    // Fungsi untuk memuat data donasi saat ini dari donasi.json
+    async function loadDonasiSaatIni() {
+      try {
+        // Ambil data dari file donasi.json
+        const response = await fetch('donasi.json');
+        const data = await response.json();
+
+        // Update total kas
+        let totalKas = 0;
+
+        // Element HTML untuk daftar donasi
+        const donasiList = document.getElementById('donasi-list');
+        
+        // Bersihkan daftar sebelumnya
+        donasiList.innerHTML = '';
+
+        // Kelompokkan data donasi berdasarkan nama
+        const groupedData = groupBy(data, 'nama');
+
+        // Loop untuk menampilkan donasi saat ini
+        Object.keys(groupedData).forEach(nama => {
+          const donasiAnggota = groupedData[nama];
+
+          // Urutkan berdasarkan waktu (terbaru di atas)
+          const sortedDonasi = donasiAnggota.sort((a, b) => parseCustomDate(b.waktu) - parseCustomDate(a.waktu));
+
+          // Donasi saat ini
+          const currentDonasiItem = document.createElement('li');
+          currentDonasiItem.className = 'flex justify-between items-center bg-gray-50 p-3 rounded-lg';
+          currentDonasiItem.innerHTML = `  
+            <span class="text-gray-700 font-medium">${nama}</span>
+            <span class="text-green-500 font-semibold">Rp. ${donasiAnggota[donasiAnggota.length - 1].donasi.toLocaleString()}</span>
+          `;
+          donasiList.appendChild(currentDonasiItem);
+          
+          // Update total kas
+          totalKas += donasiAnggota[donasiAnggota.length - 1].donasi;
+        });
+
+        // Tampilkan total kas
+        document.getElementById('total-kas').textContent = `Rp. ${totalKas.toLocaleString()}`;
+      } catch (error) {
+        console.error('Gagal memuat data donasi saat ini:', error);
+      }
+    }
+
+    // Fungsi untuk memuat data riwayat donasi dari riwayat.json
+    async function loadRiwayatDonasi() {
+      try {
+        // Ambil data dari file riwayat.json
+        const response = await fetch('riwayat.json');
+        const data = await response.json();
+
+        // Element HTML untuk history list
+        const historyList = document.getElementById('history-list');
+        
+        // Bersihkan daftar sebelumnya
+        historyList.innerHTML = '';
+
+        // Loop untuk menampilkan history donasi
+        data.forEach(donasi => {
+          const isNegative = donasi.donasi < 0;
+          const donasiColorClass = isNegative ? 'text-red-500' : 'text-green-500';
+          
+          const historyItem = document.createElement('li');
+          historyItem.className = 'flex flex-col bg-gray-50 p-4 rounded-lg shadow-sm ml-4';
+          historyItem.innerHTML = `
+            <div class="flex justify-between items-center">
+              <span class="text-gray-700 font-medium">${donasi.nama} </span>
+              <span class="${donasiColorClass}">Rp. ${donasi.donasi.toLocaleString()}</span>
+            </div>
+            <span class="text-sm text-gray-500 mt-1">${donasi.waktu}</span>
+          `;
+          historyList.appendChild(historyItem);
+        });
+      } catch (error) {
+        console.error('Gagal memuat data riwayat donasi:', error);
+      }
+    }
+
+    // Fungsi untuk mengelompokkan data berdasarkan key tertentu (contoh: 'nama')
+    function groupBy(arr, key) {
+      return arr.reduce((result, currentValue) => {
+        const groupKey = currentValue[key];
+        if (!result[groupKey]) {
+          result[groupKey] = [];
+        }
+        result[groupKey].push(currentValue);
+        return result;
+      }, {});
+    }
+
+    // Fungsi untuk memuat daftar nama anggota ke dropdown
+    async function loadNamaAnggota() {
+      try {
+        // Ambil data dari file donasi.json untuk mendapatkan daftar nama
+        const response = await fetch('donasi.json');
+        const data = await response.json();
+
+        // Ambil unique names
+        const names = [...new Set(data.map(item => item.nama))];
+
+        // Isi dropdown dengan nama anggota
+        const donorSelect = document.getElementById('donor-select');
+        donorSelect.innerHTML = '<option value="" disabled selected>Pilih Nama Anggota</option>'; // Reset dropdown
+        names.forEach(name => {
+          const option = document.createElement('option');
+          option.value = name;
+          option.textContent = name;
+          donorSelect.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Gagal memuat nama anggota:', error);
+      }
+    }
+
+    // Fungsi untuk menampilkan riwayat donasi berdasarkan nama yang dipilih
+    async function showDonorHistory() {
+      const selectedDonor = document.getElementById('donor-select').value;
+
+      if (!selectedDonor) {
+        alert('Pilih nama anggota terlebih dahulu.');
+        return;
+      }
+
+      try {
+        // Ambil data riwayat donasi
+        const response = await fetch('riwayat.json');
+        const data = await response.json();
+
+        // Filter riwayat berdasarkan nama yang dipilih
+        const donorHistory = data.filter(donasi => donasi.nama === selectedDonor);
+
+        // Element untuk menampilkan riwayat
+        const historyList = document.getElementById('history-list');
+        historyList.innerHTML = ''; // Clear previous history
+
+        // Tampilkan riwayat donasi
+        donorHistory.forEach(donasi => {
+          const isNegative = donasi.donasi < 0;
+          const donasiColorClass = isNegative ? 'text-red-500' : 'text-green-500';
+          
+
+          const historyItem = document.createElement('li');
+          historyItem.className = 'flex flex-col bg-gray-50 p-4 rounded-lg shadow-sm';
+          historyItem.innerHTML = `
+            <div class="flex justify-between items-center">
+              <span class="text-gray-700 font-medium">${donasi.nama}</span>
+              <span class="${donasiColorClass}">Rp. ${donasi.donasi.toLocaleString()}</span>
+            </div>
+            <span class="text-sm text-gray-500 mt-1">${donasi.waktu}</span>
+          `;
+          historyList.appendChild(historyItem);
+        });
+
+        // Show history section and hide current donation section
+        document.getElementById('donasi-section').classList.add('hidden');
+        document.getElementById('history-section').classList.remove('hidden');
+      } catch (error) {
+        console.error('Gagal memuat riwayat donasi:', error);
+      }
+    }
+
+    // Toggle tabs (Donasi Saat Ini vs. History Donasi)
+    document.getElementById('donasiTab').addEventListener('click', function() {
+      document.getElementById('donasi-section').classList.remove('hidden');
+      document.getElementById('history-section').classList.add('hidden');
+      loadDonasiSaatIni(); // Reload donasi saat ini
+    });
+
+    document.getElementById('historyTab').addEventListener('click', function() {
+      document.getElementById('history-section').classList.remove('hidden');
+      document.getElementById('donasi-section').classList.add('hidden');
+      loadRiwayatDonasi(); // Reload riwayat donasi
+    });
+
+    // Load data saat halaman dimuat
+    window.onload = async function() {
+      loadNamaAnggota();
+      loadDonasiSaatIni();
+    };
+
+    // Event listener untuk dropdown
+    document.getElementById('donor-select').addEventListener('change', showDonorHistory);
+  </script>
+</body>
+</html>

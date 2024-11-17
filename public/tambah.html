@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tambah Donasi</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-6">
+  <!-- Container -->
+  <div class="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-6">
+    <!-- Header -->
+    <div class="text-center">
+      <h1 class="text-2xl font-semibold text-gray-800">Tambah Donasi</h1>
+      <p class="text-gray-600 mt-2">Pilih nama, masukkan jumlah donasi, dan tanggal donasi</p>
+    </div>
+
+    <!-- Form -->
+    <form id="donasi-form" class="mt-6 space-y-4">
+      <!-- Dropdown Nama -->
+      <div>
+        <label for="nama" class="block text-gray-600 font-medium">Nama</label>
+        <select id="nama" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+          <option value="" disabled selected>Memuat nama...</option>
+        </select>
+      </div>
+
+      <!-- Input Jumlah Donasi -->
+      <div>
+        <label for="donasi" class="block text-gray-600 font-medium">Jumlah Donasi</label>
+        <input type="number" id="donasi" placeholder="Masukkan jumlah donasi" 
+               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+      </div>
+
+      <!-- Input Tanggal Donasi -->
+      <div>
+        <label for="tanggal" class="block text-gray-600 font-medium">Tanggal Donasi</label>
+        <input type="date" id="tanggal" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="button" onclick="tambahDonasi()" 
+              class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">
+        Tambahkan Donasi
+      </button>
+    </form>
+
+    <!-- Notification -->
+    <div id="notif" class="hidden mt-4 text-center p-3 rounded-lg bg-green-100 text-green-700">
+      Donasi berhasil ditambahkan!
+    </div>
+  </div>
+<!-- Form untuk Mengurangi Donasi -->
+<div class="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-6 mt-6">
+  <div class="text-center">
+    <h2 class="text-2xl font-semibold text-gray-800">Kurangi Donasi</h2>
+    <p class="text-gray-600 mt-2">Pilih nama, masukkan jumlah donasi yang akan dikurangi, dan tanggal pengurangan</p>
+  </div>
+
+  <form id="kurangi-donasi-form" class="mt-6 space-y-4">
+    <!-- Dropdown Nama -->
+    <div>
+      <label for="nama-kurangi" class="block text-gray-600 font-medium">Nama</label>
+      <select id="nama-kurangi" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+        <option value="" disabled selected>Memuat nama...</option>
+      </select>
+    </div>
+
+    <!-- Input Jumlah Pengurangan Donasi -->
+    <div>
+      <label for="donasi-kurangi" class="block text-gray-600 font-medium">Jumlah Pengurangan Donasi</label>
+      <input type="number" id="donasi-kurangi" placeholder="Masukkan jumlah donasi yang akan dikurangi" 
+             class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+    </div>
+
+    <!-- Input Tanggal Pengurangan -->
+    <div>
+      <label for="tanggal-kurangi" class="block text-gray-600 font-medium">Tanggal Pengurangan</label>
+      <input type="date" id="tanggal-kurangi" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="button" onclick="kurangiDonasi()" 
+            class="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600">
+      Kurangi Donasi
+    </button>
+  </form>
+
+  <!-- Notification -->
+  <div id="notif-kurangi" class="hidden mt-4 text-center p-3 rounded-lg bg-red-100 text-red-700">
+    Donasi berhasil dikurangi!
+  </div>
+</div>
+
+  <script>
+    // Muat data JSON dan isi dropdown
+    async function loadNama() {
+      try {
+        const response = await fetch('/donasi.json');
+        if (!response.ok) {
+          throw new Error('Gagal memuat data JSON');
+        }
+        const data = await response.json();
+
+        const namaSelect = document.getElementById('nama');
+        namaSelect.innerHTML = '<option value="" disabled selected>Pilih nama</option>'; // Reset dropdown
+        data.forEach(item => {
+          const option = document.createElement('option');
+          option.value = item.nama;
+          option.textContent = item.nama;
+          namaSelect.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Gagal memuat data JSON:', error);
+        alert('Gagal memuat nama anggota. Silakan coba lagi nanti.');
+      }
+    }
+
+    // Tambahkan donasi
+    async function tambahDonasi() {
+      const nama = document.getElementById('nama').value;
+      const donasi = parseInt(document.getElementById('donasi').value.trim());
+      const tanggal = document.getElementById('tanggal').value;
+
+      if (!nama || isNaN(donasi) || donasi <= 0 || !tanggal) {
+        alert('Harap masukkan data dengan benar!');
+        return;
+      }
+
+      try {
+        // Kirim data ke backend
+        const response = await fetch('/donasi', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nama, donasi, tanggal })
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+          const notif = document.getElementById('notif');
+          notif.classList.remove('hidden');
+          notif.textContent = `Donasi berhasil ditambahkan untuk ${nama}!`;
+
+          // Reset form
+          document.getElementById('donasi-form').reset();
+        } else {
+          alert(result.message || 'Terjadi kesalahan');
+        }
+      } catch (error) {
+        console.error('Gagal memperbarui data:', error);
+        alert('Terjadi kesalahan saat menambahkan donasi. Silakan coba lagi.');
+      }
+    }
+
+    // Panggil fungsi untuk memuat nama saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', loadNama);
+    // Muat data JSON dan isi dropdown untuk pengurangan
+async function loadNamaKurangi() {
+  try {
+    const response = await fetch('/donasi.json');
+    if (!response.ok) {
+      throw new Error('Gagal memuat data JSON');
+    }
+    const data = await response.json();
+
+    const namaSelect = document.getElementById('nama-kurangi');
+    namaSelect.innerHTML = '<option value="" disabled selected>Pilih nama</option>'; // Reset dropdown
+    data.forEach(item => {
+      const option = document.createElement('option');
+      option.value = item.nama;
+      option.textContent = item.nama;
+      namaSelect.appendChild(option);
+    });
+  } catch (error) {
+    console.error('Gagal memuat data JSON:', error);
+    alert('Gagal memuat nama anggota. Silakan coba lagi nanti.');
+  }
+}
+
+// Kurangi donasi
+async function kurangiDonasi() {
+  const nama = document.getElementById('nama-kurangi').value;
+  const donasi = parseInt(document.getElementById('donasi-kurangi').value.trim());
+  const tanggal = document.getElementById('tanggal-kurangi').value;
+
+  if (!nama || isNaN(donasi) || donasi <= 0 || !tanggal) {
+    alert('Harap masukkan data dengan benar!');
+    return;
+  }
+
+  try {
+    // Kirim data ke backend untuk mengurangi donasi
+    const response = await fetch('/kurangi-donasi', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nama, donasi, tanggal })
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      const notif = document.getElementById('notif-kurangi');
+      notif.classList.remove('hidden');
+      notif.textContent = `Donasi berhasil dikurangi untuk ${nama}!`;
+
+      // Reset form
+      document.getElementById('kurangi-donasi-form').reset();
+    } else {
+      alert(result.message || 'Terjadi kesalahan');
+    }
+  } catch (error) {
+    console.error('Gagal memperbarui data:', error);
+    alert('Terjadi kesalahan saat mengurangi donasi. Silakan coba lagi.');
+  }
+}
+
+// Panggil fungsi untuk memuat nama anggota saat halaman dimuat
+document.addEventListener('DOMContentLoaded', loadNamaKurangi);
+
+  </script>
+</body>
+</html>
