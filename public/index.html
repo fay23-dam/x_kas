@@ -44,9 +44,25 @@
       transform: rotate(30deg) translate(6px, -14px);
       transition: transform 0.8s ease;
     }
+      /* Footer with gradient background */
+.footer-gradient {
+  position: sticky;
+  bottom: 0;
+  height: 86px; /* Height for smaller screens */
+  background: linear-gradient(to bottom, rgba(59, 130, 246, 0) 0%, rgba(59, 130, 246, 0.5) 80%); /* Gradient from transparent to blue */
+}
+
+@media (min-width: 768px) {
+  .footer-gradient {
+    height: 200px; /* Height for medium and larger screens */
+  }
+}
+body {
+  background-color: #E0F7FA; /* Light blue */
+}
   </style>
 </head>
-<body class="bg-gray-100 p-6">
+<body class="">
     <!-- Container -->
    <nav class="bg-white shadow-md rounded-md mt-4 mx-4 px-6 py-2 flex items-center justify-between">
     <!-- Logo -->
@@ -79,7 +95,7 @@
       <a href="#" class="block text-blue-500 font-medium hover:text-blue-700">Uang Kas</a>
     </div>
   </div>
-    <div class="max-w-4xl mx-auto mt-4">
+    <div class="max-w-4xl mx-auto mt-4 p-6">
 
         <!-- Tabs -->
         <div class="flex justify-center items-center space-x-4 mb-6">
@@ -139,7 +155,10 @@
         </div>
     </div>
 
-  
+    <!-- Footer with Gradient -->
+    <div class="footer-gradient">
+        <!-- Your footer content goes here -->
+      </div>
   <script>
     // JavaScript to handle hamburger menu toggle and animation
     const hamburger = document.getElementById('hamburger');
@@ -469,4 +488,5 @@
         document.getElementById('donor-select').addEventListener('change', showDonorHistory);
     </script>
 </body>
+
 </html>
