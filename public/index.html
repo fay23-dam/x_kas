@@ -229,7 +229,7 @@ function copyToClipboard(norekIndex) {
 
     // Menyalin nomor rekening yang sesuai
     navigator.clipboard.writeText(norek).then(() => {
-        alert(`Nomor rekening ${norekIndex} telah disalin!`);
+        alert(`Nomor telah disalin!`);
     }).catch((error) => {
         console.error(`Gagal menyalin norek ${norekIndex}`, error);
         alert(`Gagal menyalin nomor rekening ${norekIndex}!`);
