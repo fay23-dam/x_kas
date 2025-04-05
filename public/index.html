@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Daftar Donasi Kas</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/5bb81927d8.js" crossorigin="anonymous"></script>
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
@@ -64,42 +65,42 @@ body {
 </head>
 <body class="">
     <!-- Container -->
-   <nav class="bg-white shadow-md rounded-md mt-4 mx-4 px-6 py-2 flex items-center justify-between">
-    <!-- Logo -->
-    <div class="flex items-center space-x-2">
-      <a href="https://kut-21.vercel.app/">
-      <img src="ChatGPT Image 3 Apr 2025, 18.25.41.png" alt="Logo" class="h-10"></a>
-    </div>
-
-    <!-- Hamburger Icon (visible on mobile) -->
-    <div class="block lg:hidden">
-      <button id="hamburger" class="text-blue-500 hamburger-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
-          <path id="line1" class="line1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16"></path>
-          <path id="line2" class="line2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16"></path>
-          <path id="line3" class="line3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 18h16"></path>
-        </svg>
-      </button>
-    </div>
-
-    <!-- Menu Tengah (desktop view) -->
-    <div class="hidden lg:flex space-x-6 text-blue-500 font-medium">
-      <a href="https://kut-21.vercel.app/" class="hover:text-blue-700">Home</a>
-      <a href="https://x-kas.vercel.app/" class="hover:text-blue-700">Uang kas</a>
-      <a href="https://drive.google.com/drive/folders/1LPBErcGCPF6NR_dYg4MfcB-t3XaxYVvn" class="hover:text-blue-700">Drive Kut"</a>
-      <a href="https://www.instagram.com/mhs.kutu_kutu/" class="hover:text-blue-700">IG Kut"</a>
-    </div>
-  </nav>
-
-  <!-- Mobile Menu (hidden by default) -->
-  <div id="mobile-menu" class="lg:hidden fixed ml-auto mr-6 mt-[78px] w-[170px] h-[120px] inset-3 z-50 hidden">
-    <div class="text-center space-y-4 bg-white p-6 rounded-md shadow-lg">
-      <a href="https://kut-21.vercel.app/" class="block text-blue-500 font-medium hover:text-blue-700">Home</a>
-      <a href="https://x-kas.vercel.app/" class="block text-blue-500 font-medium hover:text-blue-700">Uang Kas</a>
-      <a href="https://drive.google.com/drive/folders/1LPBErcGCPF6NR_dYg4MfcB-t3XaxYVvn" class="block text-blue-500 font-medium hover:text-blue-700">Drive Kut"</a>
-      <a href="https://www.instagram.com/mhs.kutu_kutu/" class="block text-blue-500 font-medium hover:text-blue-700">IG Kut"</a>
-    </div>
-  </div>
+    <nav class="bg-white shadow-md rounded-md mt-4 mx-4 px-6 py-2 flex items-center justify-between">
+        <!-- Logo -->
+        <div class="flex items-center space-x-2">
+          <a href="https://kut-21.vercel.app/">
+          <img src="ChatGPT Image 3 Apr 2025, 18.25.41.png" alt="Logo" class="h-10"></a>
+        </div>
+    
+        <!-- Hamburger Icon (visible on mobile) -->
+        <div class="block lg:hidden">
+          <button id="hamburger" class="text-blue-500 hamburger-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
+              <path id="line1" class="line1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16"></path>
+              <path id="line2" class="line2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16"></path>
+              <path id="line3" class="line3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+    
+        <!-- Menu Tengah (desktop view) -->
+        <div class="hidden lg:flex space-x-6 text-blue-500 font-medium">
+          <a href="https://kut-21.vercel.app/" class="hover:text-blue-700">Home</a>
+          <a href="https://x-kas.vercel.app/" class="hover:text-blue-700">Uang kas</a>
+          <a href="https://drive.google.com/drive/folders/1LPBErcGCPF6NR_dYg4MfcB-t3XaxYVvn" class="hover:text-blue-700">Drive Kut"</a>
+          <a href="https://www.instagram.com/mhs.kutu_kutu/" class="hover:text-blue-700">IG Kut"</a>
+        </div>
+      </nav>
+    
+      <!-- Mobile Menu (hidden by default) -->
+      <div id="mobile-menu" class="lg:hidden fixed ml-auto mr-6 mt-[78px] w-[170px] h-[120px] inset-3 z-50 hidden">
+        <div class="text-center space-y-4 bg-white p-6 rounded-md shadow-lg">
+          <a href="https://kut-21.vercel.app/" class="block text-blue-500 font-medium hover:text-blue-700">Home</a>
+          <a href="https://x-kas.vercel.app/" class="block text-blue-500 font-medium hover:text-blue-700">Uang Kas</a>
+          <a href="https://drive.google.com/drive/folders/1LPBErcGCPF6NR_dYg4MfcB-t3XaxYVvn" class="block text-blue-500 font-medium hover:text-blue-700">Drive Kut"</a>
+          <a href="https://www.instagram.com/mhs.kutu_kutu/" class="block text-blue-500 font-medium hover:text-blue-700">IG Kut"</a>
+        </div>
+      </div>
     <div class="max-w-4xl mx-auto mt-4 p-6">
 
         <!-- Tabs -->
@@ -117,13 +118,21 @@ body {
 
         <!-- Donasi Section -->
         <div id="donasi-section" class="bg-white rounded-lg shadow-lg p-6">
-            <div class="mb-6 text-center >
-                <h2 class="text-2xl font-semibold text-gray-800">Total Kas</h2>
+           
+            <div class="mb-6 text-center" >
             <p id="total-kas" class="text-3xl font-bold text-green-500 mt-2">Rp. 0</p>
             </div>
-
             <div>
-                <h3 class="text-xl font-semibold text-gray-800 mb-4">Daftar Donasi</h3>
+                <div class="flex mx-auto justify-between text-md mt-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Daftar Donasi</h3>
+                    <div>
+                        <button onclick="sortDesc()" class="text-white rounded-lg">⬆</button>
+                        <button onclick="sortAsc()" class=" text-white rounded-lg">⬇</button>
+                        <button onclick="modal()" class="text-white rounded-lg ">💸</button>
+
+
+                    </div>
+                </div>
                 <ul id="donasi-list" class="space-y-3">
                     <!-- Donasi items will be inserted here -->
                 </ul>
@@ -160,11 +169,72 @@ body {
         </div>
     </div>
 
+<!-- Modal -->
+<div id="transfer-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Bayar Transfer</h3>
+        <p class="text-gray-700 mb-4">Silakan transfer ke rekening berikut:</p>
+        <div class="mb-4">
+            <p class="font-medium">Bank: BRI</p>
+            <div class="flex items-center space-x-2">
+                <p class="font-medium">Nomor Rekening : </p>
+                <p id="norek" class="font-medium">8182-01-005886-53-4</p>
+                <!-- Ikon clipboard -->
+                <button onclick="copyToClipboard()" class="text-gray-500 hover:text-blue-500 focus:outline-none">
+                    <i class="fa-regular fa-clipboard"></i>
+                </button>
+            </div>
+            <p class="font-medium">Atas Nama: Maya Nurlati Kelian</p>
+            <div class="mt-4">
+                <p class="font-medium">Atau Top Up Dana Ke Nomor Berikut :</p>
+                <div class="flex items-center space-x-2">
+                    <p class="font-medium">Nomor Telefon :</p>
+                    <p id="norek1" class="font-medium">085244423190</p>
+                    
+                    <!-- Ikon clipboard -->
+                    <button onclick="copyToClipboard()" class="text-gray-500 hover:text-blue-500 focus:outline-none">
+                        <i class="fa-regular fa-clipboard"></i>
+                    </button>
+                </div>
+                <p class="font-medium">Atas Nama : Moh Saddam Satria Pattanang</p>
+            </div>
+        </div>
+        <p class="text-xs text-red-500 mb-4">*setelah bayar langsung infokan ke yang bersangkutan</p>
+        <button onclick="closeModal()" class="bg-red-500 text-white rounded-lg px-4 py-2 hover:bg-red-700 focus:outline-none">Tutup</button>
+    </div>
+</div>
     <!-- Footer with Gradient -->
     <div class="footer-gradient">
         <!-- Your footer content goes here -->
       </div>
   <script>
+    // Fungsi untuk membuka modal
+function modal() {
+    document.getElementById('transfer-modal').classList.remove('hidden');
+}
+
+// Fungsi untuk menutup modal
+function closeModal() {
+    document.getElementById('transfer-modal').classList.add('hidden');
+}
+function copyToClipboard() {
+    const norek = document.getElementById('norek').innerText;
+    const norek1 = document.getElementById('norek1').innerText;
+    navigator.clipboard.writeText(norek).then(() => {
+        alert('telah disalin!');
+    }).catch((error) => {
+        console.error('Gagal menyalin', error);
+    });
+    navigator.clipboard.writeText(norek1).then(() => {
+        alert('telah disalin!');
+    }).catch((error) => {
+        console.error('Gagal menyalin', error);
+    });
+}
+
+window.onload = function() {
+    modal(); // Panggil modal() untuk menampilkan modal saat halaman dimuat
+};
     // JavaScript to handle hamburger menu toggle and animation
     const hamburger = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobile-menu');
@@ -210,78 +280,115 @@ body {
 
         // Fungsi untuk memuat data donasi saat ini
         async function loadDonasiSaatIni() {
-            try {
-                const donasiRef = database.ref('donasi');
-                donasiRef.on('value', (snapshot) => {
-                    const data = snapshot.val();
-                    console.log(data);
-                    // Update total kas
-                    let totalKas = 0;
-                    const donasiList = document.getElementById('donasi-list');
-                    donasiList.innerHTML = '';
+        try {
+            const donasiRef = database.ref('donasi');
+            donasiRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+               
+                
+                donasiData = []; // Reset donasiData
 
-                    if (data) {
-                        Object.entries(data).forEach(([key, donasi]) => {
-                            // Buat element untuk setiap donasi
-                            const donasiItem = document.createElement('li');
-                            donasiItem.className = 'flex justify-between items-center bg-gray-50 p-3 rounded-lg';
-                            donasiItem.innerHTML = `
-                                <span class="text-gray-700 font-medium">${donasi.nama}</span>
-                                <span class="text-green-500 font-semibold">Rp. ${donasi.donasi.toLocaleString()}</span>
-                            `;
-                            donasiList.appendChild(donasiItem);
+                // Update total kas
+                let totalKas = 0;
+                const donasiList = document.getElementById('donasi-list');
+                donasiList.innerHTML = '';
 
-                            // Update total kas
-                            totalKas += donasi.donasi;
-                        });
-                    }
+                if (data) {
+                    Object.entries(data).forEach(([key, donasi]) => {
+                        donasiData.push(donasi); // Simpan data donasi dalam array
 
-                    // Tampilkan total kas
-                    document.getElementById('total-kas').textContent = `Rp. ${totalKas.toLocaleString()}`;
-                });
-            } catch (error) {
-                console.error('Gagal memuat data donasi:', error);
-            }
+                        // Update total kas
+                        totalKas += donasi.donasi;
+                    });
+                }
+
+                // Tampilkan total kas
+                document.getElementById('total-kas').textContent = `Rp. ${totalKas.toLocaleString()}`;
+
+                // Urutkan data dari yang terbesar ke terkecil saat pertama kali load
+                const sortedData = donasiData.sort((a, b) => b.donasi - a.donasi);
+                // Tampilkan donasi setelah diurutkan
+                displayDonasi(sortedData);
+            });
+        } catch (error) {
+            console.error('Gagal memuat data donasi:', error);
         }
+    }
 
-        // Fungsi untuk memuat riwayat donasi
-        async function loadRiwayatDonasi() {
-            try {
-                const riwayatRef = database.ref('riwayat');
-                riwayatRef.on('value', (snapshot) => {
-                    const data = snapshot.val();
-                    const historyList = document.getElementById('history-list');
-                    historyList.innerHTML = '';
 
-                    if (data) {
-                        // Konversi object ke array dan urutkan berdasarkan waktu
-                        const riwayatArray = Object.entries(data).map(([key, value]) => ({
-                            ...value,
-                            key
-                        })).sort((a, b) => new Date(b.waktu) - new Date(a.waktu));
+    // Fungsi untuk menampilkan daftar donasi
+    function displayDonasi(donasiData) {
+        const donasiList = document.getElementById('donasi-list');
+        donasiList.innerHTML = '';
 
-                        riwayatArray.forEach(donasi => {
-                            const isNegative = donasi.tipe === 'kurang';
-                            const donasiColorClass = isNegative ? 'text-red-500' : 'text-green-500';
-                            
-                            const historyItem = document.createElement('li');
-                            historyItem.className = 'flex flex-col bg-gray-50 p-4 rounded-lg shadow-sm';
-                            historyItem.innerHTML = `
-                                <div class="flex justify-between items-center">
-                                    <span class="text-gray-700 font-medium">${donasi.nama}</span>
-                                    <span class="${donasiColorClass}">Rp. ${Math.abs(donasi.donasi).toLocaleString()}</span>
-                                </div>
-                                <span class="text-sm text-gray-500 mt-1">${donasi.waktu}</span>
-                            `;
-                            historyList.appendChild(historyItem);
-                        });
-                    }
+        donasiData.forEach(donasi => {
+            const donasiItem = document.createElement('li');
+            donasiItem.className = 'flex justify-between items-center bg-gray-50 p-3 rounded-lg';
+            donasiItem.innerHTML = `
+                <span class="text-gray-700 font-medium">${donasi.nama}</span>
+                <span class="text-green-500 font-semibold">Rp. ${donasi.donasi.toLocaleString()}</span>
+            `;
+            donasiList.appendChild(donasiItem);
+        });
+    }
+
+    // Fungsi untuk mengurutkan donasi secara ascending
+    function sortAsc() {
+        const sortedData = donasiData.sort((a, b) => a.donasi - b.donasi);
+        displayDonasi(sortedData);
+    }
+
+    // Fungsi untuk mengurutkan donasi secara descending
+    function sortDesc() {
+        const sortedData = donasiData.sort((a, b) => b.donasi - a.donasi);
+        displayDonasi(sortedData);
+    }
+    async function loadRiwayatDonasi() {
+    try {
+        const riwayatRef = database.ref('riwayat');
+        riwayatRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            const historyList = document.getElementById('history-list');
+            historyList.innerHTML = '';
+
+            if (data) {
+                // Konversi object ke array dan urutkan berdasarkan waktu (dari yang paling baru ke paling lama)
+                const riwayatArray = Object.entries(data).map(([key, value]) => ({
+                    ...value,
+                    key
+                })).sort((a, b) => {
+                    // Mengubah tanggal dari dd/mm/yyyy ke format yang bisa dipahami JavaScript
+                    const dateA = a.waktu.split('/');  // Mengasumsikan format dd/mm/yyyy
+                    const dateB = b.waktu.split('/');  // Mengasumsikan format dd/mm/yyyy
+                    
+                    // Membuat objek Date dengan urutan yyyy-mm-dd
+                    const formattedDateA = new Date(`${dateA[2]}-${dateA[1]}-${dateA[0]}`);
+                    const formattedDateB = new Date(`${dateB[2]}-${dateB[1]}-${dateB[0]}`);
+                    
+                    return formattedDateB - formattedDateA;  // Urutkan dari yang terbaru ke yang lama
                 });
-            } catch (error) {
-                console.error('Gagal memuat riwayat donasi:', error);
-            }
-        }
 
+                riwayatArray.forEach(donasi => {
+                    const isNegative = donasi.tipe === 'kurang';
+                    const donasiColorClass = isNegative ? 'text-red-500' : 'text-green-500';
+                    
+                    const historyItem = document.createElement('li');
+                    historyItem.className = 'flex flex-col bg-gray-50 p-4 rounded-lg shadow-sm';
+                    historyItem.innerHTML = `
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-700 font-medium">${donasi.nama}</span>
+                            <span class="${donasiColorClass}">Rp. ${Math.abs(donasi.donasi).toLocaleString()}</span>
+                        </div>
+                        <span class="text-sm text-gray-500 mt-1">${donasi.waktu}</span>
+                    `;
+                    historyList.appendChild(historyItem);
+                });
+            }
+        });
+    } catch (error) {
+        console.error('Gagal memuat riwayat donasi:', error);
+    }
+}
         // Fungsi untuk memuat nama anggota
         async function loadNamaAnggota() {
             try {
@@ -307,46 +414,63 @@ body {
 
         // Fungsi untuk menampilkan riwayat donasi berdasarkan nama
         async function showDonorHistory() {
-            const selectedDonor = document.getElementById('donor-select').value;
+    const selectedDonor = document.getElementById('donor-select').value;
 
-            if (!selectedDonor) {
-                alert('Pilih nama anggota terlebih dahulu.');
-                return;
-            }
+    if (!selectedDonor) {
+        alert('Pilih nama anggota terlebih dahulu.');
+        return;
+    }
 
-            try {
-                const riwayatRef = database.ref('riwayat');
-                riwayatRef.orderByChild('nama').equalTo(selectedDonor).on('value', (snapshot) => {
-                    const data = snapshot.val();
-                    const historyList = document.getElementById('history-list');
-                    historyList.innerHTML = '';
+    try {
+        const riwayatRef = database.ref('riwayat');
+        riwayatRef.orderByChild('nama').equalTo(selectedDonor).on('value', (snapshot) => {
+            const data = snapshot.val();
+            const historyList = document.getElementById('history-list');
+            historyList.innerHTML = '';
 
-                    if (data) {
-                        Object.entries(data).forEach(([key, donasi]) => {
-                            const isNegative = donasi.tipe === 'kurang';
-                            const donasiColorClass = isNegative ? 'text-red-500' : 'text-green-500';
-                            
-                            const historyItem = document.createElement('li');
-                            historyItem.className = 'flex flex-col bg-gray-50 p-4 rounded-lg shadow-sm';
-                            historyItem.innerHTML = `
-                                <div class="flex justify-between items-center">
-                                    <span class="text-gray-700 font-medium">${donasi.nama}</span>
-                                    <span class="${donasiColorClass}">Rp. ${Math.abs(donasi.donasi).toLocaleString()}</span>
-                                </div>
-                                <span class="text-sm text-gray-500 mt-1">${donasi.waktu}</span>
-                            `;
-                            historyList.appendChild(historyItem);
-                        });
-                    }
-
-                    // Show history section and hide current donation section
-                    document.getElementById('donasi-section').classList.add('hidden');
-                    document.getElementById('history-section').classList.remove('hidden');
+            if (data) {
+                // Konversi object ke array dan urutkan berdasarkan waktu (dari yang terbaru ke yang lama)
+                const riwayatArray = Object.entries(data).map(([key, value]) => ({
+                    ...value,
+                    key
+                })).sort((a, b) => {
+                    // Mengubah tanggal dari dd/mm/yyyy ke format yang bisa dipahami JavaScript
+                    const dateA = a.waktu.split('/');  // Mengasumsikan format dd/mm/yyyy
+                    const dateB = b.waktu.split('/');  // Mengasumsikan format dd/mm/yyyy
+                    
+                    // Membuat objek Date dengan urutan yyyy-mm-dd
+                    const formattedDateA = new Date(`${dateA[2]}-${dateA[1]}-${dateA[0]}`);
+                    const formattedDateB = new Date(`${dateB[2]}-${dateB[1]}-${dateB[0]}`);
+                    
+                    return formattedDateB - formattedDateA;  // Urutkan dari yang terbaru ke yang lama
                 });
-            } catch (error) {
-                console.error('Gagal memuat riwayat donasi:', error);
+
+                riwayatArray.forEach(donasi => {
+                    const isNegative = donasi.tipe === 'kurang';
+                    const donasiColorClass = isNegative ? 'text-red-500' : 'text-green-500';
+                    
+                    const historyItem = document.createElement('li');
+                    historyItem.className = 'flex flex-col bg-gray-50 p-4 rounded-lg shadow-sm';
+                    historyItem.innerHTML = `
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-700 font-medium">${donasi.nama}</span>
+                            <span class="${donasiColorClass}">Rp. ${Math.abs(donasi.donasi).toLocaleString()}</span>
+                        </div>
+                        <span class="text-sm text-gray-500 mt-1">${donasi.waktu}</span>
+                    `;
+                    historyList.appendChild(historyItem);
+                });
             }
-        }
+
+            // Show history section and hide current donation section
+            document.getElementById('donasi-section').classList.add('hidden');
+            document.getElementById('history-section').classList.remove('hidden');
+        });
+    } catch (error) {
+        console.error('Gagal memuat riwayat donasi:', error);
+    }
+}
+
 
         // Fungsi untuk memuat dan menampilkan rekap
         async function loadRekap() {
