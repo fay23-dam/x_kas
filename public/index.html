@@ -217,27 +217,24 @@ function modal() {
 function closeModal() {
     document.getElementById('transfer-modal').classList.add('hidden');
 }
-function copyToClipboard() {
-    const norek = document.getElementById('norek').innerText;
-    const norek1 = document.getElementById('norek1').innerText;
+function copyToClipboard(norekIndex) {
+    let norek;
 
-    // Menyalin norek pertama dan memberikan alert
+    // Tentukan nomor rekening yang akan disalin berdasarkan index
+    if (norekIndex === 1) {
+        norek = document.getElementById('norek').innerText;
+    } else if (norekIndex === 2) {
+        norek = document.getElementById('norek1').innerText;
+    }
+
+    // Menyalin nomor rekening yang sesuai
     navigator.clipboard.writeText(norek).then(() => {
-        alert('Nomor rekening pertama telah disalin!');
+        alert(`Nomor rekening ${norekIndex} telah disalin!`);
     }).catch((error) => {
-        console.error('Gagal menyalin norek pertama', error);
-        alert('Gagal menyalin nomor rekening pertama!');
-    });
-
-    // Menyalin norek kedua dan memberikan alert
-    navigator.clipboard.writeText(norek1).then(() => {
-        alert('Nomor rekening kedua telah disalin!');
-    }).catch((error) => {
-        console.error('Gagal menyalin norek kedua', error);
-        alert('Gagal menyalin nomor rekening kedua!');
+        console.error(`Gagal menyalin norek ${norekIndex}`, error);
+        alert(`Gagal menyalin nomor rekening ${norekIndex}!`);
     });
 }
-
 
 window.onload = function() {
     modal(); // Panggil modal() untuk menampilkan modal saat halaman dimuat
