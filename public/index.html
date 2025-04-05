@@ -220,17 +220,24 @@ function closeModal() {
 function copyToClipboard() {
     const norek = document.getElementById('norek').innerText;
     const norek1 = document.getElementById('norek1').innerText;
+
+    // Menyalin norek pertama dan memberikan alert
     navigator.clipboard.writeText(norek).then(() => {
-        alert('telah disalin!');
+        alert('Nomor rekening pertama telah disalin!');
     }).catch((error) => {
-        console.error('Gagal menyalin', error);
+        console.error('Gagal menyalin norek pertama', error);
+        alert('Gagal menyalin nomor rekening pertama!');
     });
+
+    // Menyalin norek kedua dan memberikan alert
     navigator.clipboard.writeText(norek1).then(() => {
-        alert('telah disalin!');
+        alert('Nomor rekening kedua telah disalin!');
     }).catch((error) => {
-        console.error('Gagal menyalin', error);
+        console.error('Gagal menyalin norek kedua', error);
+        alert('Gagal menyalin nomor rekening kedua!');
     });
 }
+
 
 window.onload = function() {
     modal(); // Panggil modal() untuk menampilkan modal saat halaman dimuat
